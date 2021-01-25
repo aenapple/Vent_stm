@@ -89,7 +89,7 @@ private:
 
 
 	////// functions //////
-    float ReadChannel(u16, u16);
+    float ReadChannel(u16*, u16);
     void TSensorOn(void);
     void TSensorOff(void);
 

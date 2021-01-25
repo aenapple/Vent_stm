@@ -108,7 +108,7 @@ float TAdc::ReadTP(u16* valueAdc)
 */
 float TAdc::ReadVref(u16* valueAdc)
 {
-	return (this->ReadChannel(valueAdc[ADC_VREF_CHANNEL], valueAdc[ADC_VREF_CHANNEL]));
+	return (this->ReadChannel(valueAdc, ADC_VREF_CHANNEL));
 }
 //=== end ReadVref =================================================================
 
@@ -132,7 +132,7 @@ float TAdc::ReadVdda(u16* valueAdc)
 */
 float TAdc::ReadVin(u16* valueAdc)
 {
-    return (this->ReadChannel(valueAdc[ADC_VIN_CHANNEL], valueAdc[ADC_VREF_CHANNEL]) * 2.06);
+    return (this->ReadChannel(valueAdc, ADC_VIN_CHANNEL) * 2.06);
 }
 //=== end ReadVin ==================================================================
 
@@ -144,7 +144,7 @@ float TAdc::ReadVin(u16* valueAdc)
 */
 float TAdc::ReadT1(u16* valueAdc)
 {
-    return (this->ReadChannel(valueAdc[ADC_T1_CHANNEL], valueAdc[ADC_VREF_CHANNEL]) * 23);
+    return (this->ReadChannel(valueAdc, ADC_T1_CHANNEL) /* 23*/);
 }
 //=== end ReadT1 ===================================================================
 
@@ -156,7 +156,7 @@ float TAdc::ReadT1(u16* valueAdc)
 */
 float TAdc::ReadT2(u16* valueAdc)
 {
-    return (this->ReadChannel(valueAdc[ADC_T2_CHANNEL], valueAdc[ADC_VREF_CHANNEL]) * 23);  // 22.25476
+    return (this->ReadChannel(valueAdc, ADC_T2_CHANNEL) /* 23*/);  // 22.25476
 }
 //=== end ReadT2 ===================================================================
 
@@ -168,7 +168,7 @@ float TAdc::ReadT2(u16* valueAdc)
 */
 float TAdc::ReadT3(u16* valueAdc)
 {
-    return (this->ReadChannel(valueAdc[ADC_T3_CHANNEL], valueAdc[ADC_VREF_CHANNEL]) * 23);
+    return (this->ReadChannel(valueAdc, ADC_T3_CHANNEL) /* 23*/);
 }
 //=== end ReadT3 ===================================================================
 
@@ -178,24 +178,20 @@ float TAdc::ReadT3(u16* valueAdc)
 *
 *  @return void .
 */
-float TAdc::ReadChannel(u16 channelAdc, u16 vrefAdc)
+float TAdc::ReadChannel(u16* valueAdc, u16 channelAdc)
 {
-    float result;
-    //u16 vrefCal;
+    //float result;
 
 
-    result = ADC_VDDA_3V_CAL * (u16)(*((u16*)ADC_ADDR_VREF_CAL)) * channelAdc;
-    result = result / ADC_FULL_SCALE_12BIT / vrefAdc;
-
-    //vrefCal = *((u16*)ADC_ADDR_VREF_CAL);
-    //result = ADC_VREF_3V_CAL;
-    //result = result * vrefCal;
-    //result = result * channelAdc;
+    //result = ADC_VDDA_3V_CAL * (u16)(*((u16*)ADC_ADDR_VREF_CAL)) * valueAdc[channelAdc];
+    //result = result / ADC_FULL_SCALE_12BIT / valueAdc[ADC_VREF_CHANNEL];
+    //result = this->ReadVdda(valueAdc) * valueAdc[channelAdc] / ADC_FULL_SCALE_12BIT;
 
 
 
 
-    return (result);
+
+    return (this->ReadVdda(valueAdc) * valueAdc[channelAdc] / ADC_FULL_SCALE_12BIT);
 }
 //=== end ReadChannel ==============================================================
 

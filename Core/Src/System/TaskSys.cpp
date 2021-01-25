@@ -127,7 +127,7 @@ void TTaskSys::Run(void)
         this->tmpFloat[5] = this->Adc.ReadT2(this->valueSensor);
         this->tmpFloat[6] = this->Adc.ReadT3(this->valueSensor);
 
-
+        this->Delay(1000);
 
 		//this->DebugPrint("Cycles - %06d\r\n", counter);
 
