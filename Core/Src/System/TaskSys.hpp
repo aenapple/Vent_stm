@@ -38,6 +38,8 @@ public:
 	EOsResult Init(void);
 	void SetEventAdcCompleteFromISR(void);
     void SetEventTimerTickFromISR(void);
+    void SetEventRtcWakeUpEventFromISR(void);
+    void SysTickFromISR(void);
 
     void Delay(u16);
 
@@ -62,9 +64,12 @@ private:
 
     u16 resultAdc[ADC_NUMBER_OF_CHANNEL];
     u16 valueSensor[ADC_NUMBER_OF_CHANNEL];
+    volatile u64 sysTickCounter;
+    volatile u16 delayCounter;
 
     // DEBUG
     float tmpFloat[10];
+    u16 wakeUpCounter;
     // DEBUG
 
 

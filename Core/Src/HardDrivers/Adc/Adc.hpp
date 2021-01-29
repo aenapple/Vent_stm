@@ -28,6 +28,15 @@
 #define ADC_TP_CHANNEL    6
 
 /*
+ *    17.5      |  18.1  |  19.1  | 15.2  | 23.3
+ *  TP - 20.38  |
+ *  T1 - 0.895  | 0.912  | 0.927  | 0.851 | 1.016
+ *  T2 - 0.905  | 0.922  | 0.937  | 0.860 | 1.028
+ *  T3 - 0.907  | 0.925  | 0.948  | 0.865 | 1.036
+ *
+ */
+
+/*
 Address of the calibrate temperature sensors:
 0x1FF8 007A - 0x1FF8 007B - TS_CAL1 - 130 C
 0x1FF8 007E - 0x1FF8 007F - TS_CAL2 - 30 C

@@ -100,6 +100,7 @@ float TAdc::ReadTP(u16* valueAdc)
     return (result);
 }
 //=== end ReadTP ===================================================================
+
 //==================================================================================
 /**
 *  Todo: function description.
@@ -156,7 +157,7 @@ float TAdc::ReadT1(u16* valueAdc)
 */
 float TAdc::ReadT2(u16* valueAdc)
 {
-    return (this->ReadChannel(valueAdc, ADC_T2_CHANNEL) /* 23*/);  // 22.25476
+    return (this->ReadChannel(valueAdc, ADC_T2_CHANNEL) /* 22.25476*/);  // 22.25476
 }
 //=== end ReadT2 ===================================================================
 

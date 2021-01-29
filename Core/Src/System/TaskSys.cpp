@@ -30,6 +30,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * hTim)
     TaskSys.SetEventTimerTickFromISR();
 }
 
+void HAL_RTCEx_WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
+{
+    TaskSys.SetEventRtcWakeUpEventFromISR();
+}
+
+void HAL_IncTick(void)
+{
+    TaskSys.SysTickFromISR();
+}
+
 
 /**********************************************************************************/
 //==================================================================================
@@ -106,7 +116,8 @@ void TTaskSys::Run(void)
 		}*/
 
         Led.Led1_on();
-		this->Delay(100);
+		this->Delay(1000);
+        //this->Led.Led2_off();
         this->Adc.Start(this->resultAdc);
         /*if(this->OsEventGroup.WaitAndBits(TASK_SYS_EVENT_ADC, 1000) == OsResult_Ok)
         {
@@ -117,7 +128,7 @@ void TTaskSys::Run(void)
 
         this->Delay(10);
         this->ReadAdc();
-        //Led.Led1_off();
+        Led.Led1_off();
 
         //this->tmpFloat[0] = this->Adc.ReadTP(this->valueSensor);
         this->tmpFloat[1] = this->Adc.ReadVdda(this->valueSensor);
@@ -130,6 +141,11 @@ void TTaskSys::Run(void)
         this->Delay(1000);
 
 		//this->DebugPrint("Cycles - %06d\r\n", counter);
+
+        //HAL_SuspendTick();
+        this->Led.Led2_on();
+        //HAL_PWR_EnterSLEEPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFE);
+
 
 
 
@@ -214,15 +230,49 @@ void TTaskSys::SetEventTimerTickFromISR(void)
 
 //==================================================================================
 /**
+*  Todo: function description.
+*
+*  @return
+*  		none.
+*/
+void TTaskSys::SetEventRtcWakeUpEventFromISR(void)
+{
+    this->wakeUpCounter++;
+    this->Led.Led2_off();
+    HAL_ResumeTick();
+}
+//=== end SetEventRtcWakeUpEventFromISR ============================================
+
+//==================================================================================
+/**
+*  Todo: function description.
+*
+*  @return
+*  		none.
+*/
+void TTaskSys::SysTickFromISR(void)
+{
+    this->sysTickCounter++;
+    if(this->delayCounter > 0)
+    {
+        this->delayCounter--;
+    }
+}
+//=== end SysTickFromISR ===========================================================
+
+//==================================================================================
+/**
 *  Todo: function description..
 *
 *  @return ... .
 */
 EOsResult TTaskSys::Init(void)
 {
+    this->sysTickCounter = 0;
+
     this->Led.Init();
     this->Adc.Init();
-	this->TimerTick.Start();
+	//this->TimerTick.Start();
     //this->UartDebug.Init();
 
 
@@ -256,9 +306,21 @@ EOsResult TTaskSys::Init(void)
 *
 *  @return ... .
 */
-void TTaskSys::Delay(u16 time)
+void TTaskSys::Delay(u16 mSecTime)
 {
-    this->TimerTick.Delay(time);
+    //this->TimerTick.Delay(time);
+    this->delayCounter = mSecTime;
+    while (true)
+    {
+        if(this->delayCounter > 0)
+        {
+            continue;
+        }
+        else
+        {
+            break;
+        }
+    }
 }
 //=== end CreateTask ===============================================================
 
